@@ -3,6 +3,7 @@ import re
 from pathlib import Path
 from operator import methodcaller
 from os import makedirs
+from xml.etree.ElementTree import Element, SubElement, ElementTree, tostring
 
 from dicttoxml import dicttoxml
 
@@ -21,6 +22,9 @@ width = 320
 height = 240
 depth = 3
 
+dx = [-1, 0, 1, 0, 0]
+dy = [0, -1, 0, 1, 0]
+
 with open(str(path), 'r') as f:
     # update split function for custom split method
     annotations = map(lambda line: list(map(int, re.split(';|,| |\t', line.replace('\n', '')))), f.readlines())
@@ -31,27 +35,25 @@ with open(str(path), 'r') as f:
             makedirs(str(filename.parent))
         except:
             pass
-        with open(str(filename), 'w') as anno:
-            anno.write(dicttoxml({
-                "folder": str(path.parent),
-                "filename": str(filename),
-                "size": {
-                    "width": width,
-                    "height": height,
-                    "depth": depth,
-                }, "source": {
-                    "database": "http://cvlab.hanyang.ac.kr/tracker_benchmark/datasets.html",
-                }, "segmented": 0,
-                "object": {
-                    "name": path.parent.name,
-                    "pose": "Left",
-                    "truncated": 0,
-                    "difficult": 0,
-                    "bndbox": {
-                        "xmin": annotation[0],
-                        "ymin": annotation[1],
-                        "xmax": annotation[0] + annotation[2],
-                        "ymax": annotation[1] + annotation[3],
-                    }
-                }
-            }, custom_root='annotation', attr_type=False).decode('utf-8'))
+        root = Element("annotation")
+        SubElement(root, "folder").text = str(path.parent)
+        SubElement(root, "filename").text = str(filename)
+        SubElement(root, "segmented").text = "0"
+        size = SubElement(root, "size")
+        SubElement(size, "width").text = str(width)
+        SubElement(size, "height").text = str(height)
+        SubElement(size, "depth").text = str(depth)
+        source = SubElement(root, "source")
+        SubElement(source, "database").text = "http://cvlab.hanyang.ac.kr/tracker_benchmark/datasets.html"
+        for d in range(5):
+            obj = SubElement(root, "object")
+            SubElement(obj, "name").text = path.parent.name
+            SubElement(obj, "pose").text = "Left"
+            SubElement(obj, "truncated").text = "0"
+            SubElement(obj, "difficult").text = "0"
+            box = SubElement(obj, "bndbox")
+            SubElement(obj, "xmin").text = str(annotation[0] + dx[d])
+            SubElement(obj, "ymin").text = str(annotation[1] + dy[d])
+            SubElement(obj, "xmax").text = str(annotation[0] + annotation[2] + dx[d])
+            SubElement(obj, "ymax").text = str(annotation[1] + annotation[3] + dy[d])
+        ElementTree(root).write(str(filename))
