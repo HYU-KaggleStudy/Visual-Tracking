@@ -1,4 +1,5 @@
 import argparse
+import re
 from pathlib import Path
 from operator import methodcaller
 from os import makedirs
@@ -16,13 +17,13 @@ if not path.exists():
     exit()
 
 # default meta data
-width = 352
+width = 320
 height = 240
 depth = 3
 
 with open(str(path), 'r') as f:
     # update split function for custom split method
-    annotations = map(lambda line: list(map(int, line.split())), f.readlines())
+    annotations = map(lambda line: list(map(int, re.split(';|,| |\t', line.replace('\n', '')))), f.readlines())
 
     for index, annotation in enumerate(annotations, 1):
         filename = path.parent / 'annotations' / ('%04d.xml' % index)
@@ -42,7 +43,7 @@ with open(str(path), 'r') as f:
                     "database": "http://cvlab.hanyang.ac.kr/tracker_benchmark/datasets.html",
                 }, "segmented": 0,
                 "object": {
-                    "name": str(path.parent),
+                    "name": path.parent.name,
                     "pose": "Left",
                     "truncated": 0,
                     "difficult": 0,
