@@ -13,6 +13,8 @@ or
 
 clone this repository with `--recursive` option.
 
+And init darkflow as [link](https://github.com/thtrieu/darkflow).
+
 ## Dataset
 
 from [CVLab @ Hanyang Univ.](http://cvlab.hanyang.ac.kr/tracker_benchmark/datasets.html) 
@@ -22,6 +24,9 @@ use `script/download.py` to download datasets.
 ```
 python3 script/download.py
 ```
+
+It's create `labels.txt` as the number of downloaded classes.
+Past to darkflow and change parameter of `cfg` file.
 
 ## Annotation
 
