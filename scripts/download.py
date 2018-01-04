@@ -3,7 +3,10 @@ from pathlib import Path
 from zipfile import ZipFile
 from os import remove
 
-targets = ["http://cvlab.hanyang.ac.kr/tracker_benchmark/seq/Dog.zip"]
+targets = ["http://cvlab.hanyang.ac.kr/tracker_benchmark/seq/Dog.zip",
+"http://cvlab.hanyang.ac.kr/tracker_benchmark/seq/Car2.zip"
+]
+
 
 for tar in targets:
     path = Path("./train/") / Path(tar).name
