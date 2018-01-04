@@ -42,4 +42,4 @@ python3 script/annotation.py train/Dog/groundtruth_rect.txt
 
 ## Demo
 
-ready
+![DEMO](https://raw.githubusercontent.com/HYU-KaggleStudy/Visual-Tracking/master/result/result.gif)
