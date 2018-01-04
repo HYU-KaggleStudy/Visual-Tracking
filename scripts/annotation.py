@@ -37,7 +37,7 @@ with open(str(path), 'r') as f:
             pass
         root = Element("annotation")
         SubElement(root, "folder").text = str(path.parent)
-        SubElement(root, "filename").text = str(filename)
+        SubElement(root, "filename").text = filename.name + '.jpg'
         SubElement(root, "segmented").text = "0"
         size = SubElement(root, "size")
         SubElement(size, "width").text = str(width)
