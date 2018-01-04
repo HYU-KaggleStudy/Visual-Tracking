@@ -23,6 +23,18 @@ use `script/download.py` to download datasets.
 python3 script/download.py
 ```
 
+## Annotation
+
+Convert from given annotation format to YOLO format(`xml`).
+
+use `sciprt/annotation.py` to convert automatically.
+
+```
+python3 script/annotation.py train/Dog/groundtruth_rect.txt
+```
+
+*default image size 352 x 240 x 3*
+
 ## Demo
 
 ready
