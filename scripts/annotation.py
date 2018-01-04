@@ -52,8 +52,8 @@ with open(str(path), 'r') as f:
             SubElement(obj, "truncated").text = "0"
             SubElement(obj, "difficult").text = "0"
             box = SubElement(obj, "bndbox")
-            SubElement(obj, "xmin").text = str(annotation[0] + dx[d])
-            SubElement(obj, "ymin").text = str(annotation[1] + dy[d])
-            SubElement(obj, "xmax").text = str(annotation[0] + annotation[2] + dx[d])
-            SubElement(obj, "ymax").text = str(annotation[1] + annotation[3] + dy[d])
+            SubElement(box, "xmin").text = str(annotation[0] + dx[d])
+            SubElement(box, "ymin").text = str(annotation[1] + dy[d])
+            SubElement(box, "xmax").text = str(annotation[0] + annotation[2] + dx[d])
+            SubElement(box, "ymax").text = str(annotation[1] + annotation[3] + dy[d])
         ElementTree(root).write(str(filename))
