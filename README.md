@@ -15,6 +15,10 @@ clone this repository with `--recursive` option.
 
 And init darkflow as [link](https://github.com/thtrieu/darkflow).
 
+## Pretrained model
+
+I use `tiny-yolo-voc` from [darknet](https://pjreddie.com/darknet/yolo/)
+
 ## Dataset
 
 from [CVLab @ Hanyang Univ.](http://cvlab.hanyang.ac.kr/tracker_benchmark/datasets.html) 
@@ -39,6 +43,11 @@ python3 script/annotation.py train/Dog/groundtruth_rect.txt
 ```
 
 *default image size 352 x 240 x 3*
+
+## Train
+
+I trained 100 epoches and final loss was *2.363600621914988e-05*
+But, It is an unreliable result because the train data set is very small.
 
 ## Demo
 
