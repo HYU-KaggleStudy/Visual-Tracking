@@ -45,15 +45,30 @@ with open(str(path), 'r') as f:
         SubElement(size, "depth").text = str(depth)
         source = SubElement(root, "source")
         SubElement(source, "database").text = "http://cvlab.hanyang.ac.kr/tracker_benchmark/datasets.html"
+        # Positive region
         for d in range(5):
-            obj = SubElement(root, "object")
-            SubElement(obj, "name").text = path.parent.name
-            SubElement(obj, "pose").text = "Left"
-            SubElement(obj, "truncated").text = "0"
-            SubElement(obj, "difficult").text = "0"
-            box = SubElement(obj, "bndbox")
+            pos = SubElement(root, "object")
+            SubElement(pos, "name").text = path.parent.name
+            SubElement(pos, "pose").text = "Left"
+            SubElement(pos, "truncated").text = "0"
+            SubElement(pos, "difficult").text = "0"
+            box = SubElement(pos, "bndbox")
             SubElement(box, "xmin").text = str(annotation[0] + dx[d])
             SubElement(box, "ymin").text = str(annotation[1] + dy[d])
             SubElement(box, "xmax").text = str(annotation[0] + annotation[2] + dx[d])
             SubElement(box, "ymax").text = str(annotation[1] + annotation[3] + dy[d])
+            
+        # Negative region
+        for d in range(5):
+            neg = SubElement(root, "object")
+            SubElement(neg, "name").text = path.parent.name
+            SubElement(neg, "pose").text = "Left"
+            SubElement(neg, "truncated").text = "0"
+            SubElement(neg, "difficult").text = "0"
+            box = SubElement(neg, "bndbox")
+            SubElement(box, "xmin").text = str(annotation[0] + dx[d] * annotation[2])
+            SubElement(box, "ymin").text = str(annotation[1] + dy[d] * annotation[3])
+            SubElement(box, "xmax").text = str(annotation[0] + dx[d])
+            SubElement(box, "ymax").text = str(annotation[1] + dy[d])
+
         ElementTree(root).write(str(filename))
