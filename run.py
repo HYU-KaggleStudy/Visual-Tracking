@@ -17,11 +17,14 @@ data = '../test/'
 tfnet = TFNet(options)
 
 # Utils
+# - center position of rectangle
 center = lambda tar: ((tar[0] + tar[2]) / 2, (tar[1] + tar[3]) / 2)
+# - check overlap rectangle and position
 overlap = lambda tar, obj: tar[0] < obj[0] and obj[0] < tar[2] and tar[1] < obj[1] and obj[1] < tar[3]
+# - distance two position
 distance = lambda tar, obj: math.sqrt((tar[0] - obj[0])**2 + (tar[1] - obj[1])**2)
-tuplize = lambda tar: ((tar[0], tar[1]), (tar[2], tar[3]))
-
+# - tuplize rectangle
+tuplize = lambda tar: (tar[0], tar[1], tar[2], tar[3])
 
 with open(data + 'groundtruth_rect.txt') as f:
     a = list(map(lambda line: list(map(int, re.split(';|,| |\t', line.replace('\n', '')))), f.readlines()))
@@ -36,8 +39,7 @@ objects = [{
     'end': None,
 }]
 
-# Debug
-loss = 0
+rects = []
 
 # Process
 for b, file in zip(a, sorted(listdir(data + "img"))):
@@ -70,8 +72,12 @@ for b, file in zip(a, sorted(listdir(data + "img"))):
         if not update:
             obj['skip'].append(file)
 
-    # Showcase
-    print (file, '=======================')
-    print (objects)
-    cv2.rectangle(img, *tuplize(objects[0]['position']), (0,121, 255), 3)
-    cv2.imwrite(join(data + 'out', file), img)
+    rects.append(tuplize(objects[0]['position']))
+    # # Showcase
+    # print (file, '=======================')
+    # print (objects)
+    # cv2.rectangle(img, *tuplize(objects[0]['position']), (0,121, 255), 3)
+    # cv2.imwrite(join(data + 'out', file), img)
+
+with open(data + 'result_rect.txt', 'w') as f:
+    f.write('\n'.join([','.join(map(str, r)) for r in rects]))
