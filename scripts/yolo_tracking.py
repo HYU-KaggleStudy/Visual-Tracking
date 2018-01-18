@@ -13,7 +13,7 @@ options = {
     "threshold": 0.1
 }
 
-data = '../test/'
+data = '../train/BlurCar1/'
 tfnet = TFNet(options)
 
 # Utils
@@ -45,8 +45,8 @@ rects = []
 for b, file in zip(a, sorted(listdir(data + "img"))):
     if not isfile(join(data + "img", file)): continue
     img = cv2.imread(join(data + "img", file))
+    print (file)
 
-    updated = [False] * len(objects)
     for result in tfnet.return_predict(img):
         rect = (result['topleft']['x'],result['topleft']['y'],result['bottomright']['x'],result['bottomright']['y'])
         update = False
@@ -57,7 +57,6 @@ for b, file in zip(a, sorted(listdir(data + "img"))):
                     obj['begin'] = file
                 obj['position'] = rect
                 update = True
-                updated[i] = True
         if not update:
             objects.append({
                 'class': result['label'],
@@ -68,7 +67,7 @@ for b, file in zip(a, sorted(listdir(data + "img"))):
                 'end': None,
             })
 
-    for update, obj in zip(updated, objects):
+    for obj in objects:
         if not update:
             obj['skip'].append(file)
 
