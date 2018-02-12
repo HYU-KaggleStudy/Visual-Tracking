@@ -21,10 +21,10 @@ def load_data(data):
     def check_extension(file):
         return file.lower().endswith(('.png', '.jpg', '.jpeg'))
     def parse(line):
-        return list(map(float, re.split(';|,| |\t', line.replace('\n', ''))))
+        return list(map(int, re.split(';|,| |\t', line.replace('\n', ''))))
 
     with open(os.path.join(data, 'groundtruth_rect.txt')) as f:
-        truths = list(map(parse, f.readline()))
+        truths = list(map(parse, f.readlines()))
 
     images = list(map(lambda x: os.path.join(data, 'img', x), filter(check_extension, sorted(os.listdir(os.path.join(data, 'img'))))))
 
