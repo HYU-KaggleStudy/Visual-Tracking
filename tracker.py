@@ -258,6 +258,9 @@ if __name__ == '__main__':
     ]
 
     np.random.seed(1000)
+    torch.manual_seed(7)
+    torch.cuda.manual_seed_all()
+    total = 0
     for data in dataset:
         path = './train/{}'.format(data)
         images, truths = load_data(path)
@@ -265,3 +268,5 @@ if __name__ == '__main__':
         x = np.arange(0.001, 1.001, 0.001)
         auc = AUC(result, truths, x)
         print ('AUC of {}'.format(path), sum(auc) / len(x))
+        total += sum(auc) / len(x)
+    print ('AUC of all {}'.format(total / len(dataset)))
