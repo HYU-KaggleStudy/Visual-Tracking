@@ -15,6 +15,7 @@ from lib.generator import gen_samples
 from lib.generator import SampleGenerator
 from lib.utils import RegionExtractor
 from lib.utils import BBRegressor
+from lib.utils import AUC
 
 def load_data(data):
     def check_extension(file):
@@ -23,12 +24,11 @@ def load_data(data):
         return list(map(float, re.split(';|,| |\t', line.replace('\n', ''))))
 
     with open(os.path.join(data, 'groundtruth_rect.txt')) as f:
-        init = parse(f.readline())
+        truths = list(map(parse, f.readline()))
 
     images = list(map(lambda x: os.path.join(data, 'img', x), filter(check_extension, sorted(os.listdir(os.path.join(data, 'img'))))))
 
-    return images, init
-
+    return images, truths
 
 def forward_samples(model, image, samples, out_layer='conv3'):
     model.eval()
@@ -246,4 +246,8 @@ def run_mdnet(images, init):
 
 if __name__ == '__main__':
     path = './train/Basketball'
-    result, result_bb = run_mdnet(*load_data(path))
+    images, truths = load_data(path)
+    result, result_bb = run_mdnet(images, truths[0])
+    x = np.arange(0.001, 1.001, 0.001)
+    auc = AUC(result, truths, x)
+    print ('AUC of {}'.format(path), sum(auc) / len(x))

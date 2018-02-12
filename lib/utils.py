@@ -13,6 +13,12 @@ performance = lambda tar, obj, rat: [sum([overlap(t, o, r) for t, o in zip(tar, 
 perframe = lambda tar, obj: [sum([overlap(t, o, r) for r in x]) / len(x) for t, o in zip(tar, obj)]
 scale = lambda box, ratio=0.01: [box[0] - box[2] * ratio, box[1] - box[3] * ratio, box[2] + box[2] * ratio * 2, box[3] + box[3] * ratio * 2]
 
+def AUC(results, truths, x = np.arange(0.001, 1.001, 0.001)):
+    return performance(results, truths, x)
+
+def AUC_frame(results, truths):
+    return perframe(results, truths)
+
 def overlap_ratio(rect1, rect2):
     if rect1.ndim==1:
         rect1 = rect1[None,:]
