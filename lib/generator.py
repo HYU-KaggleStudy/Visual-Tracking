@@ -4,10 +4,8 @@ from PIL import Image
 from .utils import overlap_ratio
 
 def gen_samples(generator, bbox, n, overlap_range=None, scale_range=None):
-    
     if overlap_range is None and scale_range is None:
         return generator(bbox, n)
-    
     else:
         samples = None
         remain = n
