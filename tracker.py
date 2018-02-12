@@ -27,7 +27,7 @@ def load_data(data):
 
     images = list(map(lambda x: os.path.join(data, 'img', x), filter(check_extension, sorted(os.listdir(os.path.join(data, 'img'))))))
 
-    return images, init
+    return images[:10], init
 
 
 def forward_samples(model, image, samples, out_layer='conv3'):
@@ -254,9 +254,12 @@ def run_mdnet(images, init):
         #         f.write(','.join(map(str, gt[i])) + '\n')
         #     with open('bbox.txt', 'a') as f:
         #         f.write(','.join(map(str, result_bb[i])) + '\n')
-    fps = len(images) / spf_total
-    return result, result_bb, fps
+    return result, result_bb
 
 if __name__ == '__main__':
     path = './train/Basketball'
-    run_mdnet(*load_data(path))
+    result, result_bb = run_mdnet(*load_data(path))
+    import pickle
+
+    pickle.dump(result, open('result.p', 'wb'))
+    pickle.dump(result_bb, open('result_bb.p', 'wb'))
