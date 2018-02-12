@@ -271,5 +271,5 @@ if __name__ == '__main__':
         total += sum(auc) / len(x)
         with open(os.path.join(path, 'bounding_rect.txt'), 'w') as f:
             for result in results:
-                f.write('{}\n'.format(','.join(result)))
+                f.write('{}\n'.format(','.join(map(str, result))))
     print ('AUC of all {}'.format(total / len(dataset)))
