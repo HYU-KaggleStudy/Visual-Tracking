@@ -240,8 +240,7 @@ def run_mdnet(images, init):
             pos_data = torch.stack(pos_feats_all, 0).view(-1, feat_dim)
             neg_data = torch.stack(neg_feats_all ,0).view(-1, feat_dim)
             train(model, criterion, update_optimizer, pos_data, neg_data, options['maxiter_update'])
-        
-        print ("Frame %d/%d, Score %.3f" % (i, len(images), target_score))
+
     return result, result_bb
 
 if __name__ == '__main__':
