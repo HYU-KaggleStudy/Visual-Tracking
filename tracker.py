@@ -256,6 +256,8 @@ if __name__ == '__main__':
         'Soccer',
         'Surfer'
     ]
+
+    np.random.seed(1000)
     for data in dataset:
         path = './train/{}'.format(data)
         images, truths = load_data(path)
