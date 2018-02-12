@@ -264,9 +264,12 @@ if __name__ == '__main__':
     for data in dataset:
         path = './train/{}'.format(data)
         images, truths = load_data(path)
-        result, result_bb = run_mdnet(images, truths[0])
+        results, result_bb = run_mdnet(images, truths[0])
         x = np.arange(0.001, 1.001, 0.001)
-        auc = AUC(result, truths, x)
+        auc = AUC(results, truths, x)
         print ('AUC of {}'.format(path), sum(auc) / len(x))
         total += sum(auc) / len(x)
+        with open(os.path.join(path, 'bounding_rect.txt'), 'w') as f:
+            for result in results:
+                f.write('{}\n'.format(','.join(result)))
     print ('AUC of all {}'.format(total / len(dataset)))
