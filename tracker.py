@@ -244,9 +244,22 @@ def run_mdnet(images, init):
     return result, result_bb
 
 if __name__ == '__main__':
-    path = './train/Basketball'
-    images, truths = load_data(path)
-    result, result_bb = run_mdnet(images, truths[0])
-    x = np.arange(0.001, 1.001, 0.001)
-    auc = AUC(result, truths, x)
-    print ('AUC of {}'.format(path), sum(auc) / len(x))
+    dataset = [
+        'Basketball',
+        'Bird1',
+        'Bolt',
+        'Car1',
+        'Diving',
+        'Football',
+        'Ironman',
+        'Matrix',
+        'Soccer',
+        'Surfer'
+    ]
+    for data in dataset:
+        path = './train/{}'.format(data)
+        images, truths = load_data(path)
+        result, result_bb = run_mdnet(images, truths[0])
+        x = np.arange(0.001, 1.001, 0.001)
+        auc = AUC(result, truths, x)
+        print ('AUC of {}'.format(path), sum(auc) / len(x))
