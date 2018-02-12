@@ -30,7 +30,7 @@ options = {
     'overlap_neg_init': [0, 0.5],
     'overlap_pos_update': [0.7, 1],
     'overlap_neg_update': [0, 0.3],
-    'success_thr': .01,
+    'success_thr': .1,
     'w_decay': 0.0005,
     'momentum': 0.9,
     'grad_clip': 10,
