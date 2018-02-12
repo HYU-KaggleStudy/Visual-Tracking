@@ -172,7 +172,7 @@ def run_mdnet(images, init):
     neg_feats_all = [neg_feats[:options['n_neg_update']]]
     
     # Main loop
-    for i in range(1,len(images)):
+    for i in range(1, len(images)):
 
         # Load image
         image = Image.open(images[i]).convert('RGB')
