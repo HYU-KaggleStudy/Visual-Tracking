@@ -257,9 +257,9 @@ if __name__ == '__main__':
         'Surfer'
     ]
 
-    np.random.seed(1000)
-    torch.manual_seed(1000)
-    torch.cuda.manual_seed_all(1000)
+    np.random.seed(options['seed'])
+    torch.manual_seed(options['seed'])
+    torch.cuda.manual_seed_all(options['seed'])
     total = 0
     for data in dataset:
         path = './train/{}'.format(data)

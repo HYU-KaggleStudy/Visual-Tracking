@@ -1,5 +1,5 @@
 options = {
-    'use_gpu': False,
+    'seed': 666,
     'model_path': './bin/mdnet_vot-otb.pth',
     'img_size': 107,
     'padding': 16,
