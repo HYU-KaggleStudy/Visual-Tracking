@@ -26,7 +26,7 @@ options = {
     'n_neg_update': 200,
     'overlap_pos_update': [0.7, 1],
     'overlap_neg_update': [0, 0.3],
-    'success_thr': 0,
+    'success_thr': .01,
     'n_frames_short': 20,
     'n_frames_long': 100,
     'long_interval': 10,

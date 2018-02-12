@@ -27,7 +27,7 @@ def load_data(data):
 
     images = list(map(lambda x: os.path.join(data, 'img', x), filter(check_extension, sorted(os.listdir(os.path.join(data, 'img'))))))
 
-    return images[:10], init
+    return images, init
 
 
 def forward_samples(model, image, samples, out_layer='conv3'):
@@ -188,10 +188,7 @@ def run_mdnet(images, init):
         success = target_score > options['success_thr']
         
         # Expand search area at failure
-        if success:
-            sample_generator.set_trans_f(options['trans_f'])
-        else:
-            sample_generator.set_trans_f(options['trans_f_expand'])
+        sample_generator.set_trans_f(options['trans_f'] if success else options['trans_f_expand'])
 
         # Bbox regression
         if success:
@@ -233,33 +230,20 @@ def run_mdnet(images, init):
 
         # Short term update
         if not success:
-            nframes = min(options['n_frames_short'],len(pos_feats_all))
-            pos_data = torch.stack(pos_feats_all[-nframes:],0).view(-1,feat_dim)
-            neg_data = torch.stack(neg_feats_all,0).view(-1,feat_dim)
+            nframes = min(options['n_frames_short'], len(pos_feats_all))
+            pos_data = torch.stack(pos_feats_all[-nframes:], 0).view(-1, feat_dim)
+            neg_data = torch.stack(neg_feats_all, 0).view(-1, feat_dim)
             train(model, criterion, update_optimizer, pos_data, neg_data, options['maxiter_update'])
         
         # Long term update
         elif i % options['long_interval'] == 0:
-            pos_data = torch.stack(pos_feats_all,0).view(-1,feat_dim)
-            neg_data = torch.stack(neg_feats_all,0).view(-1,feat_dim)
+            pos_data = torch.stack(pos_feats_all, 0).view(-1, feat_dim)
+            neg_data = torch.stack(neg_feats_all ,0).view(-1, feat_dim)
             train(model, criterion, update_optimizer, pos_data, neg_data, options['maxiter_update'])
         
-        
-        print ("Frame %d/%d, Score %.3f" % \
-                (i, len(images), target_score))
-        # else:
-        #     print ("Frame %d/%d, Overlap %.3f, Score %.3f, Time %.3f" % \
-        #         (i, len(images), overlap_ratio(gt[i],result_bb[i])[0], target_score, spf))
-        #     with open('gbox.txt', 'a') as f:
-        #         f.write(','.join(map(str, gt[i])) + '\n')
-        #     with open('bbox.txt', 'a') as f:
-        #         f.write(','.join(map(str, result_bb[i])) + '\n')
+        print ("Frame %d/%d, Score %.3f" % (i, len(images), target_score))
     return result, result_bb
 
 if __name__ == '__main__':
     path = './train/Basketball'
     result, result_bb = run_mdnet(*load_data(path))
-    import pickle
-
-    pickle.dump(result, open('result.p', 'wb'))
-    pickle.dump(result_bb, open('result_bb.p', 'wb'))
